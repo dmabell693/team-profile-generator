@@ -1,10 +1,14 @@
 const render = require("./lib/htmlRenderer");
+const path = require("path");
+const fs = require("fs");
 const inquirer = require("inquirer");
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 
 const employees = [];
+const outputDir = path.resolve(__dirname, "./output");
+
 let addEngineer = true;
 let addIntern = true;
 
@@ -115,19 +119,23 @@ function getInterns() {
 async function init() {
     try {
         await getManager();
-        console.log(employees);
+        // console.log(employees);
 
         while (addEngineer) {
             await getEngineers();
-            console.log(employees);
+            // console.log(employees);
         }
         
         while (addIntern) {
             await getInterns();
-            console.log(employees);
+            // console.log(employees);
         }
 
         await render(employees);
+
+        const write = fs.writeFileSync(path.resolve(outputDir, "main.html"), render(employees), "utf8");
+
+        await write;
 
     } catch(err) {
         console.log(err);
