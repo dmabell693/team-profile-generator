@@ -1,0 +1,28 @@
+body {
+    background-image: url("./background-image/papyrus-dark.png");
+}
+
+h1 {
+    color: #323230;
+}
+
+.card {
+    border: 0;
+}
+
+.col-12 {
+    background-color: #dab903;
+}
+
+.card-body {
+    background-color: #b9b9b8;
+}
+
+.card-header {
+    background-color: #dab903;
+}
+
+.list-group-item {
+    background-color: #b9b9b8;
+    color: #323230;
+}
