@@ -85,7 +85,7 @@ function getInterns() {
             {
                 type: "input",
                 name: "internName",
-                message: "What is the name the team's intern?"
+                message: "What is the name of the team's intern?"
             },
             {
                 type: "input",
