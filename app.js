@@ -12,32 +12,77 @@ const outputDir = path.resolve(__dirname, "./output");
 let addEngineer = true;
 let addIntern = true;
 
+const validateName = name => {
+    if (/[a-z]/gi.test(name)) {
+        return true;
+    } else {
+        return "Please enter a valid name";
+    }    
+}
+
+const validateId = id => {
+    if (/[0-9]/g.test(id)) {
+        return true;
+    } else {
+        return "Please enter a valid id number";
+    }
+}
+
+// Code snippet used for RegEx taken from "https://www.w3resource.com/javascript/form/email-validation.php"
+const validateEmail = email => {
+    if ( /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/g.test(email)) {
+        return true;
+    } else {
+        return "Please enter a valid email address";
+    }
+}
+
+const validateOfficeNumber = num => {
+    if (/[a-z0-9]/gi.test(num)) {
+        return true;
+    } else {
+        return "Please enter a valid office number";
+    }
+}
+
+const validateSchool = school => {
+    if (/[a-z]/gi.test(school)) {
+        return true;
+    } else {
+        return "Please enter a valid school name";
+    }
+}
+
 function getManager() {
     return inquirer
         .prompt([
             {
                 type: "input",
-                name: "managerName",
-                message: "Please begin by providing data for the team manager. What is the team manager's name?"
+                name: "name",
+                message: "Please begin by providing data for the team manager. What is the team manager's name?",
+                validate: validateName
             },
             {
                 type: "input",
-                name: "managerId",
-                message: "What is the manager's id number?"
+                name: "id",
+                message: "What is the manager's id number?",
+                validate: validateId
             },
             {
                 type: "input",
-                name: "managerEmail",
-                message: "Please provide the manager's work email."
+                name: "email",
+                message: "Please provide the manager's work email.",
+                validate: validateEmail
             },
             {
                 type: "input",
                 name: "officeNumber",
-                message: "What is the manager's office number?"
+                message: "What is the manager's office number?",
+                validate: validateOfficeNumber
             }
         ])
         .then(function(response) {
-            let manager = new Manager(response.managerName, response.managerId, response.managerEmail, response.officeNumber);
+            let manager = new Manager(response.name, response.id, response.email, response.officeNumber);
             employees.push(manager);
         });
 }
@@ -47,18 +92,21 @@ function getEngineers() {
         .prompt([
             {
                 type: "input",
-                name: "engineerName",
-                message: "What is the name of the team's engineer?"
+                name: "name",
+                message: "What is the name of the team's engineer?",
+                validate: validateName
             },
             {
                 type: "input",
-                name: "engineerId",
-                message: "What is the engineer's id number?"
+                name: "id",
+                message: "What is the engineer's id number?",
+                validate: validateId
             },
             {
                 type: "input",
-                name: "engineerEmail",
-                message: "Please provide the engineer's work email."
+                name: "email",
+                message: "Please provide the engineer's work email.",
+                validate: validateEmail
             },
             {
                 type: "input",
@@ -72,7 +120,7 @@ function getEngineers() {
             }
         ])
         .then(function(response) {
-            let engineer = new Engineer(response.engineerName, response.engineerId, response.engineerEmail, response.GitHub);
+            let engineer = new Engineer(response.name, response.id, response.email, response.GitHub);
             addEngineer = response.addEngineer;
             employees.push(engineer);
             console.log(response);
@@ -84,23 +132,27 @@ function getInterns() {
         .prompt([
             {
                 type: "input",
-                name: "internName",
-                message: "What is the name of the team's intern?"
+                name: "name",
+                message: "What is the name of the team's intern?",
+                validate: validateName
             },
             {
                 type: "input",
-                name: "internId",
-                message: "What is the intern's id number?"
+                name: "id",
+                message: "What is the intern's id number?",
+                validate: validateId
             },
             {
                 type: "input",
-                name: "internEmail",
-                message: "Please provide the intern's work email."
+                name: "email",
+                message: "Please provide the intern's work email.",
+                validate: validateEmail
             },
             {
                 type: "input",
                 name: "school",
-                message: "Which school does the intern attend?"
+                message: "Which school does the intern attend?",
+                validate: validateSchool
             },
             {
                 type: "confirm",
@@ -109,7 +161,7 @@ function getInterns() {
             }
         ])
         .then(function(response) {
-            let intern = new Intern(response.internName, response.internId, response.internEmail, response.school);
+            let intern = new Intern(response.name, response.id, response.email, response.school);
             addIntern = response.addIntern;
             employees.push(intern);
             console.log(response);
