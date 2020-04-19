@@ -1,3 +1,4 @@
+// Dependencies
 const render = require("./lib/htmlRenderer");
 const path = require("path");
 const fs = require("fs");
@@ -6,12 +7,16 @@ const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 
+// employees array. Inquirer response objects will be pushed into this array. This array will be passed into render()
 const employees = [];
+// Set directory path for rendered html file
 const outputDir = path.resolve(__dirname, "./output");
 
+// Set these booleans to true so that the user will be prompted to choose to add or not add another engineer/intern
 let addEngineer = true;
 let addIntern = true;
 
+// Validation code for super class parameters
 const validateName = name => {
     if (/[a-z]/gi.test(name)) {
         return true;
@@ -37,6 +42,7 @@ const validateEmail = email => {
     }
 }
 
+// Validation for extension class parameters
 const validateOfficeNumber = num => {
     if (/[a-z0-9]/gi.test(num)) {
         return true;
@@ -53,6 +59,7 @@ const validateSchool = school => {
     }
 }
 
+// Get data on the employees
 function getManager() {
     return inquirer
         .prompt([
@@ -113,6 +120,7 @@ function getEngineers() {
                 name: "GitHub",
                 message: "What is the engineer's GitHub username?"
             },
+            // addEngineer(line 16) is true by default, this allows the user to choose to add or not add another engineer
             {
                 type: "confirm",
                 name: "addEngineer",
@@ -123,7 +131,6 @@ function getEngineers() {
             let engineer = new Engineer(response.name, response.id, response.email, response.GitHub);
             addEngineer = response.addEngineer;
             employees.push(engineer);
-            console.log(response);
         })
 }
 
@@ -154,6 +161,7 @@ function getInterns() {
                 message: "Which school does the intern attend?",
                 validate: validateSchool
             },
+            // cf. line 123
             {
                 type: "confirm",
                 name: "addIntern",
@@ -164,30 +172,29 @@ function getInterns() {
             let intern = new Intern(response.name, response.id, response.email, response.school);
             addIntern = response.addIntern;
             employees.push(intern);
-            console.log(response);
         })
 }
 
+// async function to control flow of prompts and data handling
 async function init() {
     try {
         await getManager();
-        // console.log(employees);
 
+        // while loop contingent on boolean value of addEngineer; loop is broken when addEngineer = false
         while (addEngineer) {
             await getEngineers();
-            // console.log(employees);
         }
         
+        // cf. line 183
         while (addIntern) {
             await getInterns();
-            // console.log(employees);
         }
 
+        // pass employees array into render function from htmlRenderer.js
         await render(employees);
 
-        const write = fs.writeFileSync(path.resolve(outputDir, "main.html"), render(employees), "utf8");
-
-        await write;
+        // previous function provides data for "main.html" file
+        await fs.writeFileSync(path.resolve(outputDir, "main.html"), render(employees), "utf8");
 
     } catch(err) {
         console.log(err);
@@ -195,6 +202,3 @@ async function init() {
 }
 
 init();
-
-
-module.exports = employees;
