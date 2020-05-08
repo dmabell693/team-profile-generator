@@ -22,7 +22,7 @@ Clone or download from GitHub repository url.
 
 ## Usage
 
-Open the command line, run 'node index.js', answer the prompts.
+Open the command line, run 'node app.js', answer the prompts.
 
 
 ## License
